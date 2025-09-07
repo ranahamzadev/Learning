@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -11,7 +13,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return view('index');
     }
 
     /**
@@ -19,7 +21,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -27,7 +29,19 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(
+            ['name' => 'required',
+            'email'=> 'required|email|unique:email',
+            'password'=> 'required',
+            'confirm_password'=> 'required|same:password',
+            ]
+        );
+
+        $customer = new customer();
+        $customer->name = $request->name;
+        $customer->email = $request->email;
+        $customer->password= $request->password;
+        $customer->save();
     }
 
     /**
